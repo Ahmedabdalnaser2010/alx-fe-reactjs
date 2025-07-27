@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import useRecipeStore from './recipeStore';
 
 const SearchBar = () => {
@@ -9,23 +9,31 @@ const SearchBar = () => {
 
     const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm);
 
+    // Memoize the setSearchTerm function to prevent unnecessary re-renders
+    const debouncedSetSearchTerm = useCallback(
+        (term) => {
+            setSearchTerm(term);
+        },
+        [setSearchTerm]
+    );
+
     // Debounce search to avoid too many updates
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            setSearchTerm(localSearchTerm);
+            debouncedSetSearchTerm(localSearchTerm);
         }, 300);
 
         return () => clearTimeout(timeoutId);
-    }, [localSearchTerm, setSearchTerm]);
+    }, [localSearchTerm, debouncedSetSearchTerm]);
 
     const handleInputChange = (e) => {
         setLocalSearchTerm(e.target.value);
     };
 
-    const handleClearSearch = () => {
+    const handleClearSearch = useCallback(() => {
         setLocalSearchTerm('');
-        setSearchTerm('');
-    };
+        debouncedSetSearchTerm('');
+    }, [debouncedSetSearchTerm]);
 
     return (
         <div className="search-bar">

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import useRecipeStore from './recipeStore';
 
@@ -11,10 +11,15 @@ const RecommendationsList = () => {
     removeFavorite: state.removeFavorite
   }));
 
+  // Memoize the generateRecommendations function
+  const memoizedGenerateRecommendations = useCallback(() => {
+    generateRecommendations();
+  }, [generateRecommendations]);
+
   // Generate recommendations when component mounts or favorites change
   useEffect(() => {
-    generateRecommendations();
-  }, [favorites, generateRecommendations]);
+    memoizedGenerateRecommendations();
+  }, [favorites.length, memoizedGenerateRecommendations]); // Use favorites.length instead of favorites array
 
   const toggleFavorite = (recipeId) => {
     if (favorites.includes(recipeId)) {
@@ -108,7 +113,7 @@ const RecommendationsList = () => {
 
       <div className="recommendations-footer">
         <button
-          onClick={generateRecommendations}
+          onClick={memoizedGenerateRecommendations}
           className="refresh-recommendations-btn"
         >
           🔄 Refresh Recommendations
