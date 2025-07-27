@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import useRecipeStore from './recipeStore';
 
-const AddRecipeForm = () => {
-    const addRecipe = useRecipeStore(state => state.addRecipe);
+const EditRecipeForm = ({ recipe, onEditComplete, onCancel }) => {
+    const updateRecipe = useRecipeStore(state => state.updateRecipe);
 
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
-        ingredients: '',
-        prepTime: ''
+        title: recipe.title || '',
+        description: recipe.description || '',
+        ingredients: recipe.ingredients?.join(', ') || '',
+        prepTime: recipe.prepTime || ''
     });
 
     const [errors, setErrors] = useState({});
@@ -65,36 +65,33 @@ const AddRecipeForm = () => {
             .map(ingredient => ingredient.trim())
             .filter(ingredient => ingredient.length > 0);
 
-        const newRecipe = {
+        const updatedRecipe = {
+            ...recipe,
             title: formData.title.trim(),
             description: formData.description.trim(),
             ingredients: ingredientsArray,
             prepTime: parseInt(formData.prepTime)
         };
 
-        addRecipe(newRecipe);
-
-        // Reset form
-        setFormData({
-            title: '',
-            description: '',
-            ingredients: '',
-            prepTime: ''
-        });
-
-        // Show success message (optional)
-        alert('Recipe added successfully!');
+        updateRecipe(updatedRecipe);
+        onEditComplete();
     };
 
     return (
-        <div className="add-recipe-form">
-            <h2>Add New Recipe</h2>
+        <div className="edit-recipe-form">
+            <div className="form-header">
+                <h2>Edit Recipe</h2>
+                <button onClick={onCancel} className="cancel-btn">
+                    Cancel
+                </button>
+            </div>
+
             <form onSubmit={handleSubmit} className="recipe-form">
                 <div className="form-group">
-                    <label htmlFor="title">Recipe Title:</label>
+                    <label htmlFor="edit-title">Recipe Title:</label>
                     <input
                         type="text"
-                        id="title"
+                        id="edit-title"
                         name="title"
                         value={formData.title}
                         onChange={handleInputChange}
@@ -105,9 +102,9 @@ const AddRecipeForm = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="description">Description:</label>
+                    <label htmlFor="edit-description">Description:</label>
                     <textarea
-                        id="description"
+                        id="edit-description"
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
@@ -119,9 +116,9 @@ const AddRecipeForm = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="ingredients">Ingredients (comma-separated):</label>
+                    <label htmlFor="edit-ingredients">Ingredients (comma-separated):</label>
                     <textarea
-                        id="ingredients"
+                        id="edit-ingredients"
                         name="ingredients"
                         value={formData.ingredients}
                         onChange={handleInputChange}
@@ -133,10 +130,10 @@ const AddRecipeForm = () => {
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="prepTime">Preparation Time (minutes):</label>
+                    <label htmlFor="edit-prepTime">Preparation Time (minutes):</label>
                     <input
                         type="number"
-                        id="prepTime"
+                        id="edit-prepTime"
                         name="prepTime"
                         value={formData.prepTime}
                         onChange={handleInputChange}
@@ -147,12 +144,17 @@ const AddRecipeForm = () => {
                     {errors.prepTime && <span className="error-message">{errors.prepTime}</span>}
                 </div>
 
-                <button type="submit" className="submit-btn">
-                    Add Recipe
-                </button>
+                <div className="form-actions">
+                    <button type="button" onClick={onCancel} className="cancel-btn">
+                        Cancel
+                    </button>
+                    <button type="submit" className="submit-btn">
+                        Update Recipe
+                    </button>
+                </div>
             </form>
         </div>
     );
 };
 
-export default AddRecipeForm;
+export default EditRecipeForm;
