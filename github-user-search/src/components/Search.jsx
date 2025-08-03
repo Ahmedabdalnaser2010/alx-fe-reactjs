@@ -2,115 +2,127 @@ import { useState } from 'react';
 import { fetchUserData } from '../services/githubService';
 
 const Search = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [userData, setUserData] = useState(null);
+  const [username, setUsername] = useState('');
+  const [location, setLocation] = useState('');
+  const [minRepos, setMinRepos] = useState('');
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-
-    if (!searchTerm.trim()) return;
-
-    setIsLoading(true);
-    setError('');
-    setUserData(null);
+    setLoading(true);
+    setError(null);
 
     try {
-      const data = await fetchUserData(searchTerm.trim());
-      setUserData(data);
+      const query = `${username} location:${location} repos:>${minRepos}`;
+      const data = await fetchUserData(query);
+      setUsers(data.items || []);
     } catch (err) {
-      setError('Looks like we cant find the user');
+      setError('Failed to fetch users. Please try again.');
+      console.error(err);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">GitHub User Search</h1>
-
-      {/* Search Form */}
-      <form onSubmit={handleSubmit} className="mb-6">
-        <div className="flex gap-2">
+    <div className="max-w-4xl mx-auto p-6">
+      <form onSubmit={handleSearch} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            Username
+          </label>
           <input
+            id="username"
             type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Enter GitHub username..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Enter GitHub username"
           />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="location">
+            Location (optional)
+          </label>
+          <input
+            id="location"
+            type="text"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Filter by location"
+          />
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="minRepos">
+            Minimum Repositories (optional)
+          </label>
+          <input
+            id="minRepos"
+            type="number"
+            value={minRepos}
+            onChange={(e) => setMinRepos(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Minimum number of repositories"
+            min="0"
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
           <button
             type="submit"
-            disabled={isLoading}
-            className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading}
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
           >
-            {isLoading ? 'Searching...' : 'Search'}
+            {loading ? 'Searching...' : 'Search'}
           </button>
         </div>
       </form>
 
-      {/* Loading State */}
-      {isLoading && (
-        <div className="text-center py-8">
-          <div className="text-lg text-gray-600">Loading...</div>
-        </div>
-      )}
-
-      {/* Error State */}
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
           {error}
         </div>
       )}
 
-      {/* User Data Display */}
-      {userData && !isLoading && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center space-x-4">
-            <img
-              src={userData.avatar_url}
-              alt={`${userData.login}'s avatar`}
-              className="w-20 h-20 rounded-full"
-            />
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                {userData.name || userData.login}
-              </h2>
-              <p className="text-gray-600">@{userData.login}</p>
-              {userData.bio && (
-                <p className="text-gray-700 mt-2">{userData.bio}</p>
-              )}
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-4 text-sm text-gray-600">
-            {userData.location && (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {users.map((user) => (
+          <div key={user.id} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow">
+            <div className="flex items-center space-x-4">
+              <img
+                src={user.avatar_url}
+                alt={`${user.login}'s avatar`}
+                className="w-16 h-16 rounded-full"
+              />
               <div>
-                <span className="font-medium">Location:</span> {userData.location}
+                <h3 className="font-bold text-lg">{user.login}</h3>
+                {user.location && <p className="text-gray-600">{user.location}</p>}
+                <a
+                  href={user.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:text-blue-700 text-sm"
+                >
+                  View Profile
+                </a>
               </div>
-            )}
-            <div>
-              <span className="font-medium">Public Repos:</span> {userData.public_repos}
             </div>
-            <div>
-              <span className="font-medium">Followers:</span> {userData.followers}
-            </div>
-            <div>
-              <span className="font-medium">Following:</span> {userData.following}
+            <div className="mt-4">
+              <p className="text-sm text-gray-600">
+                Repositories: <span className="font-semibold">{user.public_repos || 'N/A'}</span>
+              </p>
             </div>
           </div>
+        ))}
+      </div>
 
-          <div className="mt-4">
-            <a
-              href={userData.html_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
-            >
-              View GitHub Profile
-            </a>
-          </div>
+      {users.length === 0 && !loading && !error && (
+        <div className="text-center text-gray-500 mt-8">
+          No users found. Try a different search.
         </div>
       )}
     </div>
