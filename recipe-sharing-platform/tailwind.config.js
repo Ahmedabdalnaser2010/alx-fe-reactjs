@@ -5,4 +5,7 @@ module.exports = {
         extend: {},
     },
     plugins: [],
+    images: {
+        domains: ["example.com", "logo.clearbit.com"]
+    }
 };
