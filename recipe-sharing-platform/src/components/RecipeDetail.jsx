@@ -28,7 +28,14 @@ export default function RecipeDetail() {
                     <p className="text-gray-700 mb-6">{recipe.summary}</p>
 
                     <div className="grid md:grid-cols-2 gap-8">
-
+                        <div>
+                            <h2 className="text-xl font-semibold mb-3 border-b pb-2">Ingredients</h2>
+                            <ul className="list-disc pl-5 space-y-1">
+                                {recipe.ingredients.map((ingredient, index) => (
+                                    <li key={index}>{ingredient}</li>
+                                ))}
+                            </ul>
+                        </div>
 
                         <div>
                             <h2 className="text-xl font-semibold mb-3 border-b pb-2">Instructions</h2>

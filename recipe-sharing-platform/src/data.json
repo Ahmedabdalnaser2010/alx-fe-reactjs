@@ -3,24 +3,73 @@
         "id": 1,
         "title": "Spaghetti Carbonara",
         "summary": "A classic Italian pasta dish with eggs, cheese, bacon, and black pepper.",
-        "image": "https://via.placeholder.com/150"
+        "image": "https://via.placeholder.com/150",
+        "ingredients": [
+            "400g spaghetti",
+            "200g pancetta or guanciale, diced",
+            "4 large eggs",
+            "50g pecorino cheese, grated",
+            "50g parmesan, grated",
+            "Freshly ground black pepper",
+            "Salt"
+        ],
+        "instructions": "1. Cook pasta in boiling salted water\n2. Fry pancetta until crispy\n3. Whisk eggs and cheeses together\n4. Drain pasta, mix with pancetta\n5. Remove from heat, add egg mixture\n6. Season with black pepper"
     },
     {
         "id": 2,
         "title": "Chicken Tikka Masala",
         "summary": "Chunks of grilled chicken (tikka) cooked in a smooth buttery & creamy tomato based gravy.",
-        "image": "https://via.placeholder.com/150"
+        "image": "https://via.placeholder.com/150",
+        "ingredients": [
+            "500g chicken breast, cubed",
+            "150g yogurt",
+            "2 tbsp tikka masala paste",
+            "1 onion, finely chopped",
+            "3 garlic cloves, minced",
+            "400g canned tomatoes",
+            "100ml cream",
+            "1 tbsp garam masala",
+            "Fresh coriander",
+            "Vegetable oil"
+        ],
+        "instructions": "1. Marinate chicken in yogurt and spices for 2 hours\n2. Grill or bake chicken pieces\n3. Fry onions and garlic until soft\n4. Add spices and tomatoes, simmer\n5. Add cream and cooked chicken\n6. Garnish with fresh coriander"
     },
     {
         "id": 3,
-        "title": "Chicken Tikka Masala",
-        "summary": "Chunks of grilled chicken (tikka) cooked in a smooth buttery & creamy tomato based gravy.",
-        "image": "https://via.placeholder.com/150"
+        "title": "Vegetable Lasagna",
+        "summary": "Layers of pasta, roasted vegetables, and creamy béchamel sauce.",
+        "image": "https://via.placeholder.com/150",
+        "ingredients": [
+            "12 lasagna sheets",
+            "1 eggplant, sliced",
+            "2 zucchinis, sliced",
+            "1 red pepper, sliced",
+            "500g ricotta cheese",
+            "100g parmesan, grated",
+            "800g tomato passata",
+            "2 cloves garlic, minced",
+            "Fresh basil",
+            "Olive oil"
+        ],
+        "instructions": "1. Roast vegetables with olive oil\n2. Cook lasagna sheets al dente\n3. Layer sheets, vegetables, ricotta and tomato sauce\n4. Top with parmesan\n5. Bake at 180°C for 40 minutes\n6. Garnish with fresh basil"
     },
     {
         "id": 4,
-        "title": "Chicken Tikka Masala",
-        "summary": "Chunks of grilled chicken (tikka) cooked in a smooth buttery & creamy tomato based gravy.",
-        "image": "https://via.placeholder.com/150"
+        "title": "Beef Bourguignon",
+        "summary": "Classic French stew with beef slow-cooked in red wine.",
+        "image": "https://via.placeholder.com/150",
+        "ingredients": [
+            "1kg beef chuck, cubed",
+            "200g bacon lardons",
+            "300g button mushrooms",
+            "20 pearl onions",
+            "750ml red wine",
+            "2 carrots, chopped",
+            "2 garlic cloves, minced",
+            "2 tbsp tomato paste",
+            "Fresh thyme",
+            "Salt and pepper"
+        ],
+        "instructions": "1. Brown beef in batches\n2. Cook bacon until crispy\n3. Sauté vegetables\n4. Deglaze with wine\n5. Add all ingredients to pot\n6. Simmer for 3 hours until tender"
     }
 ]
